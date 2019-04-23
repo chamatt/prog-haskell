@@ -84,11 +84,16 @@ inverter = foldRec (\cur acc ->  acc ++ [cur]) []
 -- sequencia 
 
 
-maiorDaListaDeSeq [] = []
-maiorDaListaDeSeq (xs:xss)   | length xs >= length (maiorDaListaDeSeq xss) = xs
-                             | otherwise = maiorDaListaDeSeq xss
+maiorSeqIgual[] = []
+maiorSeqIgual (xs:xss)  | length xs >= length (maiorSeqIgual xss) = xs
+                        | otherwise = maiorSeqIgual xss
 
-listaDeSequencias [] = []
-listaDeSequencias (x:xs) = [takeWhile (x==) (x:xs)] ++ listaDeSequencias (dropWhile (x==) (x:xs))
+listaDeSequenciasIguais [] = []
+listaDeSequenciasIguais (x:xs) = [takeWhile (x==) (x:xs)] ++ listaDeSequenciasIguais (dropWhile (x==) (x:xs))
 
-maiorSeqIg xs = maiorDaListaDeSeq (listaDeSequencias xs)
+maiorSeqIg xs = maiorSeqIgual (listaDeSequenciasIguais xs)
+
+
+
+-- listaDeSequenciasOrdenada [] = []
+-- listaDeSequenciasOrdenada (x:xs) = [takeWhile (x<=) (xs)] ++ listaDeSequenciasOrdenada (dropWhile (x<=) (xs))
