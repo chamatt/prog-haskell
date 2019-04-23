@@ -53,3 +53,42 @@ terceiro = head . tail . tail
 
 ultimo = head . reverse
 
+
+-- fold
+
+foldRec:: (a -> b -> b) -> b -> [a] -> b
+foldRec f i [] = i
+foldRec f i (x:xs) = f x (foldRec f i xs)
+
+-- soma
+soma = foldRec (+) 0
+
+-- produto
+produto = foldRec (*) 1
+
+-- or
+ou = foldRec (||) False
+
+-- tamanho
+
+tamanho = foldRec (\cur acc -> acc + 1) 0
+
+-- concatena
+
+concatena = foldRec (++) [] 
+
+-- inverter
+
+inverter = foldRec (\cur acc ->  acc ++ [cur]) []
+
+-- sequencia 
+
+
+maiorDaListaDeSeq [] = []
+maiorDaListaDeSeq (xs:xss)   | length xs >= length (maiorDaListaDeSeq xss) = xs
+                             | otherwise = maiorDaListaDeSeq xss
+
+listaDeSequencias [] = []
+listaDeSequencias (x:xs) = [takeWhile (x==) (x:xs)] ++ listaDeSequencias (dropWhile (x==) (x:xs))
+
+maiorSeqIg xs = maiorDaListaDeSeq (listaDeSequencias xs)
