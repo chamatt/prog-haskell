@@ -81,7 +81,7 @@ concatena = foldRec (++) []
 
 inverter = foldRec (\cur acc ->  acc ++ [cur]) []
 
--- sequencia 
+-- sequencia de igauis 
 
 
 maiorSeqIgual[] = []
@@ -89,11 +89,25 @@ maiorSeqIgual (xs:xss)  | length xs >= length (maiorSeqIgual xss) = xs
                         | otherwise = maiorSeqIgual xss
 
 listaDeSequenciasIguais [] = []
-listaDeSequenciasIguais (x:xs) = [takeWhile (x==) (x:xs)] ++ listaDeSequenciasIguais (dropWhile (x==) (x:xs))
+listaDeSequenciasIguais (x:xs) = [takeWhile (\y -> x == y) (x:xs)] ++ listaDeSequenciasIguais (dropWhile (\y -> x == y) (x:xs))
 
 maiorSeqIg xs = maiorSeqIgual (listaDeSequenciasIguais xs)
 
 
+-- sequencia generica
 
--- listaDeSequenciasOrdenada [] = []
--- listaDeSequenciasOrdenada (x:xs) = [takeWhile (x<=) (xs)] ++ listaDeSequenciasOrdenada (dropWhile (x<=) (xs))
+maiorSeq [] = []
+maiorSeq (xs:xss)  | length xs >= length (maiorSeq xss) = xs
+                   | otherwise = maiorSeq xss
+
+-- listaDeSequencias :: (Eq a, Ord a) => (a -> a -> Bool) -> [a] -> [[a]]
+listaDeSequencias f [] = []
+listaDeSequencias f [x] = []
+listaDeSequencias f (x:y:xs) = [x:takeWhile (\y -> f x y) (y:xs)] ++ listaDeSequencias (f) (dropWhile (\y -> f x y) (y:xs))
+
+
+maiorSeqDe f xs = maiorSeq (listaDeSequencias f xs)
+
+
+
+
