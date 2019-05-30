@@ -28,16 +28,56 @@ somarEleganteDeVerdade (Succ a) b = Succ(somarEleganteDeVerdade a b)
 data Expr = Val Int | Add Expr Expr | Mult Expr Expr 
             deriving Show
 
+-- instance Eq Expr where
+--     a == b = avalia a == avalia b
+
+instance Eq Expr where
+    Add a1 a2 == Add b1 b2 = (a1 == b1 && a2 == b2) || (a1 == b2 && a2 == b1)
+    Mult a1 a2 == Mult b1 b2 = (a1 == b1 && a2 == b2) || (a1 == b2 && a2 == b1)
+    Val a == Val b = a == b
+    _ == _ = False
 
 
+----------------------------
 avalia (Val a) = a
 avalia (Add a b) = avalia a + avalia b
 avalia (Mult a b) = avalia a * avalia b
 
-exprSize (Val a) = 1
-exprSize (Add a b) = exprSize a + exprSize b
-exprSize (Mult a b) = exprSize a + exprSize b
+valSize (Val a) = 1
+valSize (Add a b) = valSize a + valSize b
+valSize (Mult a b) = valSize a + valSize b
 
 operatorSize (Val a) = 0
 operatorSize (Add a b) = 1 + operatorSize a + operatorSize b
 operatorSize (Mult a b) = 1 + operatorSize a + operatorSize b
+
+{--------------------------
+            4
+    2               6
+1       3       5      7
+--------------------------}
+
+data Arvore a = Vazia | No (Arvore a) a (Arvore a)
+
+arvoreTeste = No (No (No Vazia 1 Vazia) 2 (No Vazia 3 Vazia)) 4 (No (No Vazia 5 Vazia) 6 (No Vazia 7 Vazia))
+
+
+pertence x (Vazia) = False
+pertence x (No esq a dir) =    x == a 
+                            || pertence x esq 
+                            || pertence x dir
+
+pertenceTalvez :: Eq a => a -> Arvore a -> Maybe a
+pertenceTalvez x a | pertence x a = Just x
+                   | otherwise  = Nothing
+
+vazia Vazia = True
+vazia _ = False
+
+buscaBinaria x (Vazia) = False
+buscaBinaria x (No esq meio dir) | x == meio = True
+                                 | x > meio = buscaBinaria x dir
+                                 | otherwise = buscaBinaria x esq
+
+buscaBinariaTalvez x arv | buscaBinaria x arv = Just x
+                         | otherwise = Nothing
